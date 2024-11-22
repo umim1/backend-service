@@ -73,4 +73,27 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
 
+# データベース作成用のコード
+import sqlite3
+
+def initialize_database():
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS matches (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            game_mode TEXT,
+            stage TEXT,
+            team_tank TEXT,
+            enemy_tank TEXT,
+            role TEXT,
+            character TEXT,
+            time_of_day TEXT,
+            result TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+initialize_database()
 
