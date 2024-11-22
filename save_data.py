@@ -26,14 +26,18 @@ def save_data():
     try:
         # JSONデータの取得
         data = request.get_json()
-        game_mode = data['game_mode']
-        stage = data['stage']
-        team_tank = data['team_tank']
-        enemy_tank = data['enemy_tank']
-        role = data['role']
-        character = data['character']
-        time_of_day = data['time_of_day']
-        result = data['result']
+        print("受信データ:", data)  # デバッグ用ログ
+
+        # データ取得の確認
+        game_mode = data.get('game_mode', None)
+        stage = data.get('stage', None)
+        team_tank = data.get('team_tank', None)
+        enemy_tank = data.get('enemy_tank', None)
+        role = data.get('role', None)
+        character = data.get('character', None)
+        time_of_day = data.get('time_of_day', None)
+        result = data.get('result', None)
+        print(f"データ内容: {game_mode}, {stage}, {team_tank}, {enemy_tank}, {role}, {character}, {time_of_day}, {result}")
 
         # データベースに接続
         conn = sqlite3.connect(DATABASE)
@@ -49,11 +53,12 @@ def save_data():
         # 変更を保存して接続を閉じる
         conn.commit()
         conn.close()
+        print("データベースに保存完了")  # ログ出力
 
         return SUCCESS_HTML, 200
     except Exception as e:
-        print("エラー:", str(e))
-        traceback.print_exc()
+        print("エラー内容:", str(e))
+        traceback.print_exc()  # エラー内容を出力
         return "データの保存中にエラーが発生しました。", 500
 
 # アプリケーションのエントリーポイント
@@ -61,5 +66,3 @@ if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-
